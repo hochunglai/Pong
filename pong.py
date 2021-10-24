@@ -4,6 +4,8 @@ import random
 #Variable
 sta=False;
 score=0;
+rx=0;
+ry=0;
 
 #Screen Setup
 sc = turtle.Screen()
@@ -29,6 +31,10 @@ ball.color("white")
 ball.penup()
 ball.goto(0, 10)
 ball.showturtle()
+while rx ==0:
+    rx = random.randrange(-1,1)
+ball.dx = rx
+ball.dy = 0.8
 
 #Start Setup
 starts = turtle.Turtle()
@@ -71,47 +77,36 @@ sc.onkeypress(paddleleft, "a")
 sc.onkeypress(startg, "space")
 
 def main():
-    #Ball Random x
-    sx=0;
-    while sx == 0:
-        sx = random.randrange(-2,5)
 
-    #Ball Shoot y
-    sy=1;
     while True:
         sc.update()
-        print(sx)
+
         #Set ball initial x shooting angle
-        x = ball.xcor()
-        x = x + sx;
-        ball.setx(x)
-
-        #Set ball initial y shooting angle
-        y = ball.ycor()
-        y = y + sy
-        ball.sety(y)
-
+        ball.goto((ball.xcor()+ball.dx), (ball.ycor()+ball.dy))
+        print("x-",ball.xcor(),"y-", ball.ycor())
         # Checking borders
-        if y > 98:
+        if ball.ycor() > 98:
             ball.sety(98)
-            sy = -1
-            scoreup()
+            ball.dy *= -1
 
-        if x < -100:
+        if ball.xcor() < -100:
             ball.setx(-100)
-            sx = sx*(-1)
+            ball.dx *= -1
 
-        if y < -25:
-            ball.sety(-25)
-            sy = 1
+        if ball.ycor() < -25:
+            exit()
 
-        if x > 98:
+        if ball.xcor() > 98:
             ball.setx(98)
-            sx = sx*(-1)
+            ball.dx *= -1
 
        #Collisions
+        if ((ball.ycor() < (paddle.ycor()+5))) & ((ball.xcor()< (paddle.xcor()+20))) & ((ball.xcor()) > (paddle.xcor()-20)):
+            ry = float(random.randrange(110,135)/100)
+            ball.dy = ball.dy * -1 * ry
+            scoreup()
 
-
+            
 turtle.done()
     
 
